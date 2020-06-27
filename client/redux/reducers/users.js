@@ -1,5 +1,8 @@
+import axios from 'axios'
+
 const initialState = {
-  users: ['Ivan', 'Petya']
+  users: ['Ivan', 'Petya'],
+  user: {}
 }
 
 export default (state = initialState, action) => {
@@ -9,7 +12,23 @@ export default (state = initialState, action) => {
         ...state,
         users: [...state.users, action.user]
       }
+    case 'SET_USER':
+      return {
+        ...state,
+        user: action.user
+      }
     default:
       return { ...state }
+  }
+}
+
+export function getPlaceUser(id) {
+  return (dispatch) => {
+    axios(`http://jsonplaceholder.typicode.com/users/${id}`).then(({ data }) =>
+      dispatch({
+        type: 'SET_USER',
+        user: data
+      })
+    )
   }
 }
